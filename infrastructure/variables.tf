@@ -188,7 +188,26 @@ variable "public_cidr" {
   description = "The IPv4 CIDR blocks for the public subnet of your OpenShift Cluster. The default value is 10.0.0.0/20. "
 }
 
+variable "iscsi_rendezvous_ip" {
+  type    = string
+  default = "10.0.32.2"
+  description = "The iSCSI Rendezvous IP address provided in the agent-config.yaml file. This host will execute all agent-based installation related services to deploy the OpenShift cluster."
+}
+
+variable "rendezvous_ip" {
+  type    = string
+  default = "10.0.16.2"
+  description = "The Rendezvous IP address provided in the agent-config.yaml file. This host will execute all agent-based installation related services to deploy the OpenShift cluster."
+}
+
+variable "enable_static_ip" {
+  type    = bool
+  default = true
+  description = "Flag to enable static Rendezvous IP assignment for the first control plane node"
+}
+
 variable "openshift_image_source_uri" {
+  default = ""
   type        = string
   description = "The OCI Object Storage URL for the OpenShift image. Before provisioning resources through this Resource Manager stack, users should upload the OpenShift image to OCI Object Storage, create a pre-authenticated requests (PAR) uri, and paste the uri to this block. For more detail regarding Object storage and PAR, please visit https://docs.oracle.com/en-us/iaas/Content/Object/Concepts/objectstorageoverview.htm and https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/usingpreauthenticatedrequests.htm ."
 }

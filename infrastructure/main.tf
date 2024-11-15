@@ -627,7 +627,11 @@ resource "oci_load_balancer_backend" "openshift_cluster_api_backend_set_external
   load_balancer_id = oci_load_balancer_load_balancer.openshift_api_apps_lb.id
   backendset_name  = oci_load_balancer_backend_set.openshift_cluster_api_backend_set_external.name
   port             = 6443
-  ip_address       = !local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ? data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address : data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address
+  ip_address       = var.enable_static_ip && each.key == keys(local.cp_node_map)[0] ? (
+    local.is_control_plane_iscsi_type ? var.iscsi_rendezvous_ip : var.rendezvous_ip
+  ) : (!local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ?
+    data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address :
+    data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address)
 }
 
 resource "oci_load_balancer_backend" "openshift_cp_cluster_ingress_https_backend_set_backends" {
@@ -635,7 +639,11 @@ resource "oci_load_balancer_backend" "openshift_cp_cluster_ingress_https_backend
   load_balancer_id = oci_load_balancer_load_balancer.openshift_api_apps_lb.id
   backendset_name  = oci_load_balancer_backend_set.openshift_cluster_ingress_https_backend_set.name
   port             = 443
-  ip_address       = !local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ? data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address : data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address
+  ip_address       = var.enable_static_ip && each.key == keys(local.cp_node_map)[0] ? (
+    local.is_control_plane_iscsi_type ? var.iscsi_rendezvous_ip : var.rendezvous_ip
+  ) : (!local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ?
+    data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address :
+    data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address)
 }
 
 resource "oci_load_balancer_backend" "openshift_cp_cluster_ingress_http_backend_set_backends" {
@@ -643,7 +651,11 @@ resource "oci_load_balancer_backend" "openshift_cp_cluster_ingress_http_backend_
   load_balancer_id = oci_load_balancer_load_balancer.openshift_api_apps_lb.id
   backendset_name  = oci_load_balancer_backend_set.openshift_cluster_ingress_http_backend_set.name
   port             = 80
-  ip_address       = !local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ? data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address : data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address
+  ip_address       = var.enable_static_ip && each.key == keys(local.cp_node_map)[0] ? (
+    local.is_control_plane_iscsi_type ? var.iscsi_rendezvous_ip : var.rendezvous_ip
+  ) : (!local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ?
+    data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address :
+    data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address)
 }
 
 resource "oci_load_balancer_backend" "openshift_cluster_api_backend_set_internal_backends" {
@@ -651,7 +663,11 @@ resource "oci_load_balancer_backend" "openshift_cluster_api_backend_set_internal
   load_balancer_id = oci_load_balancer_load_balancer.openshift_api_int_lb.id
   backendset_name  = oci_load_balancer_backend_set.openshift_cluster_api_backend_set_internal.name
   port             = 6443
-  ip_address       = !local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ? data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address : data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address
+  ip_address       = var.enable_static_ip && each.key == keys(local.cp_node_map)[0] ? (
+    local.is_control_plane_iscsi_type ? var.iscsi_rendezvous_ip : var.rendezvous_ip
+  ) : (!local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ?
+    data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address :
+    data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address)
 }
 
 resource "oci_load_balancer_backend" "openshift_cluster_infra-mcs_backend_set_backends" {
@@ -659,7 +675,11 @@ resource "oci_load_balancer_backend" "openshift_cluster_infra-mcs_backend_set_ba
   load_balancer_id = oci_load_balancer_load_balancer.openshift_api_int_lb.id
   backendset_name  = oci_load_balancer_backend_set.openshift_cluster_infra-mcs_backend_set.name
   port             = 22623
-  ip_address       = !local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ? data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address : data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address
+  ip_address       = var.enable_static_ip && each.key == keys(local.cp_node_map)[0] ? (
+    local.is_control_plane_iscsi_type ? var.iscsi_rendezvous_ip : var.rendezvous_ip
+  ) : (!local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ?
+    data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address :
+    data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address)
 }
 
 resource "oci_load_balancer_backend" "openshift_cluster_infra-mcs_backend_set_2_backends" {
@@ -667,7 +687,11 @@ resource "oci_load_balancer_backend" "openshift_cluster_infra-mcs_backend_set_2_
   load_balancer_id = oci_load_balancer_load_balancer.openshift_api_int_lb.id
   backendset_name  = oci_load_balancer_backend_set.openshift_cluster_infra-mcs_backend_set_2.name
   port             = 22624
-  ip_address       = !local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ? data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address : data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address
+  ip_address       = var.enable_static_ip && each.key == keys(local.cp_node_map)[0] ? (
+    local.is_control_plane_iscsi_type ? var.iscsi_rendezvous_ip : var.rendezvous_ip
+  ) : (!local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ?
+    data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address :
+    data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address)
 }
 
 resource "oci_load_balancer_backend" "openshift_cluster_ingress_https_backend_set_backends" {
@@ -675,7 +699,11 @@ resource "oci_load_balancer_backend" "openshift_cluster_ingress_https_backend_se
   load_balancer_id = oci_load_balancer_load_balancer.openshift_api_apps_lb.id
   backendset_name  = oci_load_balancer_backend_set.openshift_cluster_ingress_https_backend_set.name
   port             = 443
-  ip_address       = !local.is_compute_iscsi_type ? data.oci_core_vnic.compute_primary_vnic[each.key].private_ip_address : data.oci_core_vnic.compute_secondary_vnic[each.key].private_ip_address
+  ip_address       = var.enable_static_ip && each.key == keys(local.cp_node_map)[0] ? (
+    local.is_control_plane_iscsi_type ? var.iscsi_rendezvous_ip : var.rendezvous_ip
+  ) : (!local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ?
+    data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address :
+    data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address)
 }
 
 resource "oci_load_balancer_backend" "openshift_cluster_ingress_http_backend_set_backends" {
@@ -683,7 +711,11 @@ resource "oci_load_balancer_backend" "openshift_cluster_ingress_http_backend_set
   load_balancer_id = oci_load_balancer_load_balancer.openshift_api_apps_lb.id
   backendset_name  = oci_load_balancer_backend_set.openshift_cluster_ingress_http_backend_set.name
   port             = 80
-  ip_address       = !local.is_compute_iscsi_type ? data.oci_core_vnic.compute_primary_vnic[each.key].private_ip_address : data.oci_core_vnic.compute_secondary_vnic[each.key].private_ip_address
+  ip_address       = var.enable_static_ip && each.key == keys(local.cp_node_map)[0] ? (
+    local.is_control_plane_iscsi_type ? var.iscsi_rendezvous_ip : var.rendezvous_ip
+  ) : (!local.is_control_plane_iscsi_type && !local.is_compute_iscsi_type ?
+    data.oci_core_vnic.control_plane_primary_vnic[each.key].private_ip_address :
+    data.oci_core_vnic.control_plane_secondary_vnic[each.key].private_ip_address)
 }
 
 resource "oci_dns_zone" "openshift" {
@@ -801,6 +833,9 @@ resource "oci_core_instance" "control_plane_node" {
     nsg_ids = [
       oci_core_network_security_group.cluster_controlplane_nsg.id,
     ]
+    private_ip = var.enable_static_ip && each.key == keys(local.cp_node_map)[0] ? (
+      local.is_control_plane_iscsi_type ? var.iscsi_rendezvous_ip : var.rendezvous_ip
+    ) : null
     subnet_id = oci_core_subnet.private.id
   }
 
